@@ -2,12 +2,6 @@ import json
 import os
 import sys
 
-# Define the filename for the output file
-output_file = 'output.log'
-
-# Redirect standard output to a file
-sys.stdout = open(output_file, 'w')
-
 # Paths to the directories
 dir_a = 'clair-cve-result'
 dir_b = 'trivy-cve-result'
@@ -16,7 +10,8 @@ def load_json_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
         return json.load(file)
 
-def compare_vulnerabilities(file_a, file_b):
+# Compare each image's CVE report 
+def compare_vulnerabilities(file_a, file_b, output_file):
     data_a = load_json_file(file_a)
     data_b = load_json_file(file_b)
     
@@ -43,35 +38,31 @@ def compare_vulnerabilities(file_a, file_b):
     # Count the number of different vulnerabilities
     num_different_vulnerabilities = len(set_vuln_a.symmetric_difference(set_vuln_b))
 
-    print(f"File '{(dir_a)}/{os.path.basename(file_a)}' has {num_vuln_a} vulnerabilities.")
-    print(f"File '{(dir_b)}/{os.path.basename(file_b)}' has {num_vuln_b} vulnerabilities.")
-    print()
+    output_file.write(f"File '{os.path.basename(file_a)}' has {num_vuln_a} vulnerabilities.\n")
+    output_file.write(f"File '{os.path.basename(file_b)}' has {num_vuln_b} vulnerabilities.\n\n")
 
-    print(f"{num_shared_vulnerabilities} vulnerabilities are shared between the two files.")
-    print(f"{num_different_vulnerabilities} vulnerabilities are different between the two files.")
-    print()
+    output_file.write(f"{num_shared_vulnerabilities} vulnerabilities are shared between the two files.\n")
+    output_file.write(f"{num_different_vulnerabilities} vulnerabilities are different between the two files.\n\n")
 
     if common_vulnerabilities:
-        print(f"Files '{(dir_a)}/{os.path.basename(file_a)}' and '{(dir_b)}/{os.path.basename(file_b)}' share the following vulnerabilities:")
-        print(", ".join(common_vulnerabilities))
-        print()
+        output_file.write(f"Files '{os.path.basename(file_a)}' and '{os.path.basename(file_b)}' share the following vulnerabilities:\n")
+        output_file.write(", ".join(common_vulnerabilities) + "\n\n")
 
     if num_different_vulnerabilities > 0:  # Only print different vulnerabilities if there are any
-        print(f"Files '{(dir_a)}/{os.path.basename(file_a)}' and '{(dir_b)}/{os.path.basename(file_b)}' have different vulnerabilities:")
-        print()  # This will print a new empty line
-        print(f"Vulnerability in '{(dir_a)}/{os.path.basename(file_a)}' that is not in '{(dir_b)}/{os.path.basename(file_b)}':")
+        output_file.write(f"Files '{os.path.basename(file_a)}' and '{os.path.basename(file_b)}' have different vulnerabilities:\n\n")
+        output_file.write(f"Vulnerability in '{os.path.basename(file_a)}' that is not in '{os.path.basename(file_b)}':\n")
         if set_vuln_a.difference(set_vuln_b):
-            print(set_vuln_a.difference(set_vuln_b))
+            output_file.write(", ".join(set_vuln_a.difference(set_vuln_b)) + "\n")
         else:
-            print("None")
-        print()
-        print(f"Vulnerability in '{(dir_b)}/{os.path.basename(file_b)}' that is not in '{(dir_a)}/{os.path.basename(file_a)}':")
+            output_file.write("None\n")
+        output_file.write("\n")
+        output_file.write(f"Vulnerability in '{os.path.basename(file_b)}' that is not in '{os.path.basename(file_a)}':\n")
         if set_vuln_b.difference(set_vuln_a):
-            print(set_vuln_b.difference(set_vuln_a))
+            output_file.write(", ".join(set_vuln_b.difference(set_vuln_a)) + "\n")
         else:
-            print("None")
+            output_file.write("None\n")
     
-    print("=====================================================================")
+    output_file.write("=====================================================================")
 
 
 def extract_vulnerabilities(data):
@@ -105,24 +96,36 @@ def extract_vulnerabilities(data):
    
     return []
 
+def main():
+    # List json files in both directories
+    files_in_a = [os.path.join(dir_a, f) for f in os.listdir(dir_a) if f.endswith('.json')]
+    files_in_b = [os.path.join(dir_b, f) for f in os.listdir(dir_b) if f.endswith('.json')]
 
-# List json files in both directories
-files_in_a = [os.path.join(dir_a, f) for f in os.listdir(dir_a) if f.endswith('.json')]
-files_in_b = [os.path.join(dir_b, f) for f in os.listdir(dir_b) if f.endswith('.json')]
+    # Define the filename for the output file
+    output_file = 'image_comparison_results.log'
 
-# Assuming the same filenames exist in both directories
-for file_a in files_in_a:
-    file_basename = os.path.basename(file_a)
-    file_b = os.path.join(dir_b, file_basename)
-    
-    if file_b in files_in_b:
-        compare_vulnerabilities(file_a, file_b)
-    else:
-        print(f"No matching file found in Directory B for {file_basename}")
+    # Redirect standard output to a file
+    with open(output_file, 'w') as f_out:
 
+        f_out.write("Comparing each image's vulnerabilities between clair and trivy:\n")
 
-# Close the output file
-sys.stdout.close()
+        # Assuming the same filenames exist in both directories
+        for file_a in files_in_a:
+            file_basename = os.path.basename(file_a)
+            file_b = os.path.join(dir_b, file_basename)
+            
+            if file_b in files_in_b:
+                compare_vulnerabilities(file_a, file_b, f_out)
+            else:
+                f_out.write(f"No matching file found in Directory B for {file_basename}\n")
 
-# Reset stdout to the default console output
-sys.stdout = sys.__stdout__
+        print("Log printed: image_comparison_results.log")
+
+    # Close the output file
+    sys.stdout.close()
+
+    # Reset stdout to the default console output
+    sys.stdout = sys.__stdout__
+
+if __name__ == "__main__":
+    main()
