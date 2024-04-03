@@ -38,31 +38,31 @@ def compare_vulnerabilities(file_a, file_b, output_file):
     # Count the number of different vulnerabilities
     num_different_vulnerabilities = len(set_vuln_a.symmetric_difference(set_vuln_b))
 
-    output_file.write(f"File '{os.path.basename(file_a)}' has {num_vuln_a} vulnerabilities.\n")
-    output_file.write(f"File '{os.path.basename(file_b)}' has {num_vuln_b} vulnerabilities.\n\n")
+    output_file.write(f"File '{dir_a}'/'{os.path.basename(file_a)}' has {num_vuln_a} vulnerabilities.\n")
+    output_file.write(f"File '{dir_b}'/'{os.path.basename(file_b)}' has {num_vuln_b} vulnerabilities.\n\n")
 
     output_file.write(f"{num_shared_vulnerabilities} vulnerabilities are shared between the two files.\n")
     output_file.write(f"{num_different_vulnerabilities} vulnerabilities are different between the two files.\n\n")
 
     if common_vulnerabilities:
-        output_file.write(f"Files '{os.path.basename(file_a)}' and '{os.path.basename(file_b)}' share the following vulnerabilities:\n")
+        output_file.write(f"Files '{dir_a}'/'{os.path.basename(file_a)}' and '{dir_b}'/'{os.path.basename(file_b)}' share the following vulnerabilities:\n")
         output_file.write(", ".join(common_vulnerabilities) + "\n\n")
 
     if num_different_vulnerabilities > 0:  # Only print different vulnerabilities if there are any
-        output_file.write(f"Files '{os.path.basename(file_a)}' and '{os.path.basename(file_b)}' have different vulnerabilities:\n\n")
-        output_file.write(f"Vulnerability in '{os.path.basename(file_a)}' that is not in '{os.path.basename(file_b)}':\n")
+        output_file.write(f"Files '{dir_a}'/'{os.path.basename(file_a)}' and '{dir_b}'/'{os.path.basename(file_b)}' have different vulnerabilities:\n\n")
+        output_file.write(f"Vulnerability in '{dir_a}'/'{os.path.basename(file_a)}' that is not in '{dir_b}'/'{os.path.basename(file_b)}':\n")
         if set_vuln_a.difference(set_vuln_b):
             output_file.write(", ".join(set_vuln_a.difference(set_vuln_b)) + "\n")
         else:
             output_file.write("None\n")
         output_file.write("\n")
-        output_file.write(f"Vulnerability in '{os.path.basename(file_b)}' that is not in '{os.path.basename(file_a)}':\n")
+        output_file.write(f"Vulnerability in '{dir_b}'/'{os.path.basename(file_b)}' that is not in '{dir_a}'/'{os.path.basename(file_a)}':\n")
         if set_vuln_b.difference(set_vuln_a):
             output_file.write(", ".join(set_vuln_b.difference(set_vuln_a)) + "\n")
         else:
             output_file.write("None\n")
     
-    output_file.write("=====================================================================")
+    output_file.write("=====================================================================\n")
 
 
 def extract_vulnerabilities(data):
@@ -107,7 +107,7 @@ def main():
     # Redirect standard output to a file
     with open(output_file, 'w') as f_out:
 
-        f_out.write("Comparing each image's vulnerabilities between clair and trivy:\n")
+        f_out.write("Comparing each image's vulnerabilities between Clair and Trivy:\n")
 
         # Assuming the same filenames exist in both directories
         for file_a in files_in_a:

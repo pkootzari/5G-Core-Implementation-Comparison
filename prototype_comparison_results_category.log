@@ -1,0 +1,53 @@
+Total number of CVEs in 'free5GC': '4052' 
+
+Total number of CVEs in 'free5GC in Clair': '1659' 
+
+Total number of CVEs in 'free5GC in Trivy': '2393' 
+
+=================================================
+Total number of CVEs in 'Open5GS': '3455' 
+
+Total number of CVEs in 'Open5GS in Clair': '768' 
+
+Total number of CVEs in 'Open5GS in Trivy': '2687' 
+
+=================================================
+'free5GC in Clair' 'PHYSICAL': '37'
+'free5GC in Clair' 'LOCAL': '796'
+'free5GC in Clair' 'ADJACENT_NETWORK': '68'
+'free5GC in Clair' 'NETWORK': '394'
+'free5GC in Clair' 'HIGH': '443'
+'free5GC in Clair' 'LOW': '71'
+'free5GC in Clair' 'CRITICAL': '28'
+'free5GC in Clair' 'MEDIUM': '753'
+========================================================================
+'free5GC in Trivy' 'PHYSICAL': '37'
+'free5GC in Trivy' 'LOCAL': '1084'
+'free5GC in Trivy' 'ADJACENT_NETWORK': '76'
+'free5GC in Trivy' 'NETWORK': '658'
+'free5GC in Trivy' 'HIGH': '597'
+'free5GC in Trivy' 'LOW': '111'
+'free5GC in Trivy' 'CRITICAL': '42'
+'free5GC in Trivy' 'MEDIUM': '1105'
+========================================================================
+=================================================
+'Open5GS in Clair' 'PHYSICAL': '11'
+'Open5GS in Clair' 'LOCAL': '402'
+'Open5GS in Clair' 'ADJACENT_NETWORK': '24'
+'Open5GS in Clair' 'NETWORK': '211'
+'Open5GS in Clair' 'HIGH': '252'
+'Open5GS in Clair' 'LOW': '25'
+'Open5GS in Clair' 'CRITICAL': '16'
+'Open5GS in Clair' 'MEDIUM': '355'
+========================================================================
+'Open5GS in Trivy' 'PHYSICAL': '38'
+'Open5GS in Trivy' 'LOCAL': '1371'
+'Open5GS in Trivy' 'ADJACENT_NETWORK': '50'
+'Open5GS in Trivy' 'NETWORK': '856'
+'Open5GS in Trivy' 'MEDIUM': '1383'
+'Open5GS in Trivy' 'HIGH': '755'
+'Open5GS in Trivy' 'CRITICAL': '72'
+'Open5GS in Trivy' 'LOW': '104'
+'Open5GS in Trivy' 'NONE': '1'
+========================================================================
+=================================================
