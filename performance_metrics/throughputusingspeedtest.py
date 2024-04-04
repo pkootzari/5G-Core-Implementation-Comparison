@@ -1,9 +1,12 @@
 import time
 import speedtest
-import matplotlib.pyplot as plt
+
 
 def measure_throughput(repeats):
     st = speedtest.Speedtest()
+
+    server_id = [60309]  # this is the information of the server: Bell Canada (Dorval, QC, Canada) [150.78 km]
+    st.get_servers(server_id)
     
     download_throughput = []
     upload_throughput = []
@@ -16,6 +19,7 @@ def measure_throughput(repeats):
         # Upload speed measurement
         upload_speed = st.upload()
         upload_throughput.append(upload_speed / 1024/ 1024)  # Convert to Mbps
+        
         print(download_speed/1024/1024, upload_speed/1024/1024)
 
         time.sleep(1)
@@ -24,7 +28,13 @@ def measure_throughput(repeats):
 
 if __name__ == "__main__":
     download_throughput, upload_throughput = measure_throughput(15)
-    print("download throughput: ", download_throughput)
-    print("upload throguhput: ", upload_throughput)
+    
+    print("download throughput: ")
+    for throughput in download_throughput:
+        print(throughput)
+    
+    print("upload throughput: ")
+    for throughput in upload_throughput:
+        print(throughput)
 
     
