@@ -26,6 +26,7 @@ if __name__ == '__main__':
     rtt_list = ping(host, count)
     if rtt_list:
         print("RTT times for each ICMP packet sent:")
-        print(rtt_list)
+        for rtt in rtt_list:
+            print(rtt)
     else:
         print('No RTT times received.')
