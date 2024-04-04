@@ -185,7 +185,8 @@ def main():
         # analyze_cwe_cve_results("test", test, f_out)
         analyze_cwe_cve_results("free5GC in Clair", process_directory_results(dir_a_results_free5gc), f_out)
         analyze_cwe_cve_results("free5GC in Trivy", process_directory_results(dir_b_results_free5gc), f_out)
-
+        analyze_cwe_cve_results("Open5GS in Clair", process_directory_results(dir_a_results_open5gs), f_out)
+        analyze_cwe_cve_results("Open5GS in Trivy", process_directory_results(dir_b_results_open5gs), f_out)
 
 
 if __name__ == "__main__":
